@@ -2,3 +2,6 @@ Running: xsim.dir/mips_testbench_behav/xsimk.exe -simmode gui -wdb mips_testbenc
 Design successfully loaded
 Design Loading Memory Usage: 9172 KB (Peak: 9172 KB)
 Design Loading CPU Usage: 0 ms
+Simulation completed
+Simulation Memory Usage: 10096 KB (Peak: 10096 KB)
+Simulation CPU Usage: 0 ms

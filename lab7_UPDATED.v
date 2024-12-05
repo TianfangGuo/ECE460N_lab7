@@ -74,19 +74,34 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-module Complete_MIPS(CLK, RST, A_Out, D_Out);
+module Complete_MIPS(CLK, RST, HALT, leds);
   // Will need to be modified to add functionality
   // THIS IS YOUR TOP MODULE. YOU DEFINE WHAT SIGNALS YOU NEED TO INPUT AND OUTPUT
   input CLK;
-  input RST;
-  output A_Out;
-  output D_Out;
+  input RST, HALT;
+  output wire [7:0] leds;
+//  output A_Out;
+//  output D_Out;
+
+//clock divider
+reg slow_clk;
+reg [27:0] counter;
+
+always @(posedge CLK) begin
+    if(counter == 6250000) begin
+        counter <= 0;
+        slow_clk = ~slow_clk;
+    end//if
+    else
+        counter <= counter + 1;
+end//always
+
 
   wire CS, WE;
   wire [6:0] ADDR;
   wire [31:0] Mem_Bus;
 
-  MIPS CPU(CLK, RST, CS, WE, ADDR, Mem_Bus);
+  MIPS CPU(slow_clk, RST, HALT, CS, WE, ADDR, Mem_Bus, leds);
   Memory MEM(CS, WE, CLK, ADDR, Mem_Bus);
 
 endmodule
@@ -111,8 +126,8 @@ module Memory(CS, WE, CLK, ADDR, Mem_Bus);
   initial
   begin
     /* Write your Verilog-Text IO code here */
-    $readmemh("C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/MIPS_Instructions.txt", RAM);
-    //$readmemh("C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/rotating_light.txt", RAM);
+    //$readmemh("C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/MIPS_Instructions.txt", RAM);
+    $readmemh("C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/rotating_light.txt", RAM);
   end
 
   assign Mem_Bus = ((CS == 1'b0) || (WE == 1'b1)) ? 32'bZ : data_out;
@@ -133,7 +148,7 @@ endmodule
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-module REG(CLK, RegW, DR, SR1, SR2, Reg_In, ReadReg1, ReadReg2);
+module REG(CLK, RegW, DR, SR1, SR2, Reg_In, ReadReg1, ReadReg2, leds);
   input CLK;
   input RegW;
   input [4:0] DR;
@@ -142,9 +157,12 @@ module REG(CLK, RegW, DR, SR1, SR2, Reg_In, ReadReg1, ReadReg2);
   input [31:0] Reg_In;
   output reg [31:0] ReadReg1;
   output reg [31:0] ReadReg2;
+  output wire [7:0] leds;
 
   reg [31:0] REG [0:31];
   integer i;
+  
+  assign leds = REG[1][7:0];
 
   initial begin
     ReadReg1 = 0;
@@ -175,9 +193,10 @@ endmodule
 `define f_code instr[5:0]
 `define numshift instr[10:6]
 
-module MIPS (CLK, RST, CS, WE, ADDR, Mem_Bus);
-  input CLK, RST;
+module MIPS (CLK, RST, HALT, CS, WE, ADDR, Mem_Bus, leds);
+  input CLK, RST, HALT;
   output reg CS, WE;
+  output wire [7:0] leds;
   output [6:0] ADDR;
   inout [31:0] Mem_Bus;
 
@@ -230,7 +249,7 @@ module MIPS (CLK, RST, CS, WE, ADDR, Mem_Bus);
 
   //drive memory bus only during writes
   assign ADDR = (fetchDorI)? pc : alu_result_save[6:0]; //ADDR Mux
-  REG Register(CLK, regw, dr, `sr1, `sr2, reg_in, readreg1, readreg2);
+  REG Register(CLK, regw, dr, `sr1, `sr2, reg_in, readreg1, readreg2, leds);
 
   initial begin
     op = and1; opsave = and1;
@@ -249,8 +268,13 @@ module MIPS (CLK, RST, CS, WE, ADDR, Mem_Bus);
     npc = pc; op = jr; reg_or_imm = 0; alu_or_mem = 0; nstate = 3'd0;
     case (state)
       0: begin //fetch
-        npc = pc + 7'd1; CS = 1; nstate = 3'd1;
-        fetchDorI = 1;
+        if(!HALT) begin
+            npc = pc + 7'd1; CS = 1; nstate = 3'd1;
+            fetchDorI = 1;
+        end//if
+        else if(HALT) begin
+            nstate = 0;
+        end//if
       end
       1: begin //decode
         nstate = 3'd2; reg_or_imm = 0; alu_or_mem = 0;

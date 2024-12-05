@@ -3,8 +3,8 @@
 # SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
 # IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
 # SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Thu Dec  5 01:06:50 2024
-# Process ID: 27744
+# Start of session at: Thu Dec  5 09:48:51 2024
+# Process ID: 4328
 # Current directory: C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/lab7.runs/impl_1
 # Command line: vivado.exe -log Complete_MIPS.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source Complete_MIPS.tcl -notrace
 # Log file: C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/lab7.runs/impl_1/Complete_MIPS.vdi
@@ -19,6 +19,6 @@
 # Host memory       :33457 MB
 # Swap memory       :4026 MB
 # Total Virtual     :37483 MB
-# Available Virtual :10764 MB
+# Available Virtual :8020 MB
 #-----------------------------------------------------------
 source Complete_MIPS.tcl -notrace
