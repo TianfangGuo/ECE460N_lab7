@@ -1,46 +1,72 @@
 // You can use this skeleton testbench code, the textbook testbench code, or your own
-module MIPS_Testbench ();
-  reg CLK;
-  reg RST;
-  wire CS;
-  wire WE;
-  wire [31:0] Mem_Bus;
-  wire [6:0] Address;
+//module MIPS_Testbench ();
+//  reg CLK;
+//  reg RST;
+//  wire CS;
+//  wire WE;
+//  wire [31:0] Mem_Bus;
+//  wire [6:0] Address;
+//  parameter N = 10;
+//  reg[31:0] expected_output[N:1];
+//  integer i;
 
-  initial
-  begin
-    CLK = 0;
-  end
+//  initial
+//  begin
+//    CLK = 0;
+//    expected_output[1] = 32'h00000006; 
+//    expected_output[2] = 32'h00000012; 
+//    expected_output[3] = 32'h00000018; 
+//    expected_output[4] = 32'h0000000C; 
+//    expected_output[5] = 32'h00000002; 
+//    expected_output[6] = 32'h00000016; 
+//    expected_output[7] = 32'h00000001; 
+//    expected_output[8] = 32'h00000120; 
+//    expected_output[9] = 32'h00000003; 
+//    expected_output[10] = 32'h00412022;
+    
+//  end
 
-  MIPS CPU(CLK, RST, CS, WE, Address, Mem_Bus);
-  Memory MEM(CS, WE, CLK, Address, Mem_Bus);
+//  MIPS CPU(CLK, RST, CS, WE, Address, Mem_Bus);
+//  Memory MEM(CS, WE, CLK, Address, Mem_Bus);
 
-  always
-  begin
-    #5 CLK = !CLK;
-  end
+//  always
+//  begin
+//    #5 CLK = !CLK;
+//  end
 
-  always
-  begin
-    RST <= 1'b1; //reset the processor
+//  always
+//  begin
+//    RST <= 1'b1; //reset the processor
 
-    //Notice that the memory is initialize in the in the memory module not here
+//    //Notice that the memory is initialize in the in the memory module not here
 
-    @(posedge CLK);
-    @(posedge CLK);
-    // driving reset low here puts processor in normal operating mode
-    RST = 1'b0;
+//    @(posedge CLK);
+    
+//    @(posedge CLK);
+//    // driving reset low here puts processor in normal operating mode
+//    RST = 1'b0;
 
-    /* add your testing code here */
-    // you can add in a 'Halt' signal here as well to test Halt operation
-    // you will be verifying your program operation using the
-    // waveform viewer and/or self-checking operations
+//    /* add your testing code here */
+//    // you can add in a 'Halt' signal here as well to test Halt operation
+//    // you will be verifying your program operation using the
+//    // waveform viewer and/or self-checking operations
+    
+//    for(i=1; i<11; i = i+1) begin
+//        @(posedge WE);
+//        @(negedge CLK);
+        
+//        if(Mem_Bus != expected_output[i]) $display("Error, expected %d, actually %d", expected_output[i], Mem_Bus);
+        
+//    end//for
 
-    $display("TEST COMPLETE");
-    $stop;
-  end
+//    $display("TEST COMPLETE");
+//    $stop;
+//  end
 
-endmodule
+//endmodule
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -85,6 +111,8 @@ module Memory(CS, WE, CLK, ADDR, Mem_Bus);
   initial
   begin
     /* Write your Verilog-Text IO code here */
+    $readmemh("C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/MIPS_Instructions.txt", RAM);
+    //$readmemh("C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/rotating_light.txt", RAM);
   end
 
   assign Mem_Bus = ((CS == 1'b0) || (WE == 1'b1)) ? 32'bZ : data_out;

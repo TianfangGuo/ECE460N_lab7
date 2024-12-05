@@ -1,0 +1,7 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/lab7_UPDATED.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Complete_MIPS
+INFO: [VRFC 10-311] analyzing module Memory
+INFO: [VRFC 10-311] analyzing module REG
+INFO: [VRFC 10-311] analyzing module MIPS
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/taylo/Desktop/Fa24/460M_lab6/ECE460N_lab7/lab7.srcs/sim_1/new/partA_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mips_testbench
